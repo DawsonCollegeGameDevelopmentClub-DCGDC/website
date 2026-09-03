@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- data-theme attribute will be managed by JS -->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dawson Game Dev Club</title>
+  <!--
+      FOUC PREVENTION SCRIPT:
+      This runs instantly before the page content is rendered to set the theme,
+      preventing a "flash of unstyled content" if the user has a saved
+      or OS-level preference for a non-default theme.
+    -->
+  <script>
+    (function () {
+      const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles/style.css" />
+  <script src="/scripts/script.js" defer></script>
+</head>
+
+<body>
+
+
+  <header class="navbar">
+  </header>
+
+  <main class="content">
+    <h1>Our Team</h1>
+    <p></p>
+  </main>
+
+</body>
+
+</html>
