@@ -1,3 +1,4 @@
+"use strict";
 // This main script runs after the DOM is ready.
 document.addEventListener('DOMContentLoaded', function() {
   // --- Mobile Menu Toggle ---
