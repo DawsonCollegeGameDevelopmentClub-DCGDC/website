@@ -9,10 +9,18 @@ async function appendNav() {
 
 }
 
+async function appendFooter() {
+  const response = await fetch("/pages/footer.html");
+  const footerHTML = await response.text();
+  const footer = document.querySelector(".footer");
+  footer.innerHTML = footerHTML;
+}
+
 async function setupNavbarAndTheme() {
   await appendNav();
+  await appendFooter();
   setupThemeToggle();
-  setupMobileNavbar()
+  setupMobileNavbar();
 }
 
 async function setupThemeToggle() {
