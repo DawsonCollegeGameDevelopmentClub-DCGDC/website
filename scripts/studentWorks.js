@@ -25,7 +25,12 @@ const escapeHTML = (value) => String(value).replace(/[&<>'"]/g, (character) => (
 	'"': '&quot;'
 })[character]);
 
-const truncate = (value, maxLength = 34) => value.length > maxLength ? `${value.slice(0, maxLength - 1)}...` : value;
+const truncate = (value, maxLength = 34) => {
+  if (value.length > maxLength) {
+    return `${value.slice(0, maxLength - 1)}...`;
+  }
+  return value;
+};
 
 function getMatchScore(value, regex, query) {
 	const match = value.match(regex);
