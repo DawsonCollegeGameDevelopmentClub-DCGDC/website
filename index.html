@@ -31,11 +31,57 @@
   </header>
 
   <main class="content">
-    <h1>Welcome to the Dawson Game Dev Club website!</h1>
-    <img src="assets/DawsonGDC.jpg" alt="Dawson College game development Logo" class="logo" />
-    <p>We are a student-run para-academic at Dawson College that focuses on game development and art</p>
-    <p></p>
+    <section class="hero-panel" aria-labelledby="home-title">
+      <div class="hero-copy">
+        <p class="eyebrow">PLAYER ONE // DAWSON COLLEGE</p>
+        <h1 id="home-title">Build worlds. Find your people.</h1>
+        <p class="intro">A student-run para-academic for game development, art, and the wonderfully chaotic process of making something playable.</p>
+        <div class="hero-actions">
+          <a class="button button--primary" href="#mission-control">Start exploring <span aria-hidden="true">-&gt;</span></a>
+          <a class="button button--quiet" href="pages/team.html">Meet the crew</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-label="Dawson Game Dev Club logo">
+        <img src="assets/DawsonGDC.jpg" alt="Dawson College game development Logo" class="logo" />
+        <span class="hero-art__label">GDC // ONLINE</span>
+      </div>
+    </section>
+
+    <section class="mission-control" id="mission-control" aria-labelledby="mission-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">CURRENT RUN</p>
+          <h2 id="mission-title">Mission control</h2>
+        </div>
+        <span class="status-pill"><span class="status-dot"></span> Recruiting</span>
+      </div>
+
+      <div class="mission-grid">
+        <article class="mission-card mission-card--featured">
+          <div class="mission-card__topline"><span>QUEST 01</span><span>OPEN PARTY</span></div>
+          <h3>Make something weird</h3>
+          <p>Join a team, bring an idea, or just watch the pixels take shape.</p>
+          <button class="button button--dark" id="mission-button" type="button">Accept quest <span aria-hidden="true">+</span></button>
+          <p class="mission-feedback" id="mission-feedback" aria-live="polite"></p>
+        </article>
+
+        <div class="stats-grid">
+          <article class="stat-card"><span class="stat-card__icon" aria-hidden="true">01</span><strong>Game jams</strong><span>Fast, friendly experiments</span></article>
+          <article class="stat-card"><span class="stat-card__icon" aria-hidden="true">02</span><strong>Skill sharing</strong><span>Art, code, design, audio</span></article>
+          <article class="stat-card"><span class="stat-card__icon" aria-hidden="true">03</span><strong>New allies</strong><span>Find your next co-op</span></article>
+          <article class="stat-card stat-card--meter"><div><strong>Club energy</strong><span>Level 07 / 10</span></div><span class="energy-meter"><span></span></span></article>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p><strong>DAWSON DGD</strong><br />Make. Play. Repeat.</p>
+      <p class="site-footer__signal">SYSTEM STATUS: <span>ALL SYSTEMS GO</span></p>
+      <p>&copy; 2026 Dawson Game Dev</p>
+    </div>
+  </footer>
 
 </body>
 

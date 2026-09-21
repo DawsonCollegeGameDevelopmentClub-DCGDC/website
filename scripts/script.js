@@ -50,4 +50,20 @@ async function setupMobileNavbar() {
 
 }
 
+function setupMissionButton() {
+  const missionButton = document.getElementById('mission-button');
+  const missionFeedback = document.getElementById('mission-feedback');
+  const discordInvite = 'https://discord.gg/XwTqyADs2Z';
+
+  if (missionButton && missionFeedback) {
+    missionButton.addEventListener('click', function () {
+      window.open(discordInvite, '_blank', 'noopener,noreferrer');
+      missionButton.textContent = 'Quest accepted +';
+      missionButton.disabled = true;
+      missionFeedback.textContent = 'Nice. Your next co-op starts here.';
+    });
+  }
+}
+
 setupNavbarAndTheme();
+setupMissionButton();
