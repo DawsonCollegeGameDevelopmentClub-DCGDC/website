@@ -4,13 +4,12 @@ const studentWorks = [
 	{
 		name: 'Chiikawa platformer',
 		students: ['Aris John Apolinario', 'Kelly Yu'],
-		submitted: '2026-11-05',
+		submitted: '2025-11-05',
 		started: '2025-10-11',
 		synopsis: 'A random platformer game based on the Chiikawa anime, where you play as a cute character navigating through various levels and obstacles.',
 		link: 'https://sonic.dawsoncollege.qc.ca/~2532450/Chiikawa-main/Chiikawa/pages/Game.html',
-		images: [
-		]
-	},
+		images: [ '../assets/DawsonGDC.jpg' ]
+	},  
 
 ];
 
@@ -22,14 +21,17 @@ function renderStudentWorks(works) {
 	const list = document.getElementById('student-works-list');
 	const count = document.getElementById('works-count');
 	if (!list || !count) return;
+	const sortedWorks = [...works].sort((firstWork, secondWork) => (
+		new Date(`${secondWork.submitted}T12:00:00`) - new Date(`${firstWork.submitted}T12:00:00`)
+	));
 
-	count.textContent = `${works.length} project${works.length === 1 ? '' : 's'}`;
-	if (!works.length) {
+	count.textContent = `${sortedWorks.length} project${sortedWorks.length === 1 ? '' : 's'}`;
+	if (!sortedWorks.length) {
 		list.innerHTML = '<p class="works-empty">No projects have landed yet. Check back soon.</p>';
 		return;
 	}
 
-	list.innerHTML = works.map((work, index) => {
+	list.innerHTML = sortedWorks.map((work, index) => {
 		const images = work.images?.length ? work.images : ['../assets/DawsonGDC.jpg'];
 		const imageSlides = images.map((image, imageIndex) => `
 			<img class="work-gallery__image${imageIndex === 0 ? ' is-active' : ''}" src="${image}" alt="${work.name} preview ${imageIndex + 1}" data-slide="${imageIndex}" loading="lazy" />
