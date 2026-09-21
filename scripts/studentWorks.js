@@ -26,27 +26,53 @@ function renderStudentWorks(works) {
 		new Date(`${secondWork.submitted}T12:00:00`) - new Date(`${firstWork.submitted}T12:00:00`)
 	));
 
-	count.textContent = `${sortedWorks.length} project${sortedWorks.length === 1 ? '' : 's'}`;
+	let projectSuffix = 's';
+	if (sortedWorks.length === 1) {
+		projectSuffix = '';
+	}
+	count.textContent = `${sortedWorks.length} project${projectSuffix}`;
 	if (!sortedWorks.length) {
 		list.innerHTML = '<p class="works-empty">No projects have landed yet. Check back soon.</p>';
 		return;
 	}
 
 	list.innerHTML = sortedWorks.map((work, index) => {
-		const images = work.images?.length ? work.images : ['../assets/DawsonGDC.jpg'];
-		const imageSlides = images.map((image, imageIndex) => `
-			<img class="work-gallery__image${imageIndex === 0 ? ' is-active' : ''}" src="${image}" alt="${work.name} preview ${imageIndex + 1}" data-slide="${imageIndex}" loading="lazy" />
-		`).join('');
-		const dots = images.map((_, imageIndex) => `
-			<button class="work-gallery__dot${imageIndex === 0 ? ' is-active' : ''}" type="button" aria-label="Show image ${imageIndex + 1} of ${images.length}" aria-pressed="${imageIndex === 0}" data-slide-to="${imageIndex}"></button>
-		`).join('');
-		const link = work.link ? `<a class="button button--dark" href="${work.link}" target="_blank" rel="noopener noreferrer">View project <span aria-hidden="true">-&gt;</span></a>` : '<span class="work-card__unlinked">No showcase link yet</span>';
+		let images = ['../assets/DawsonGDC.jpg'];
+		if (work.images?.length) {
+			images = work.images;
+		}
+		const imageSlides = images.map((image, imageIndex) => {
+			let activeClass = '';
+			if (imageIndex === 0) {
+				activeClass = ' is-active';
+			}
+			return `
+				<img class="work-gallery__image${activeClass}" src="${image}" alt="${work.name} preview ${imageIndex + 1}" data-slide="${imageIndex}" loading="lazy" />
+			`;
+		}).join('');
+		const dots = images.map((_, imageIndex) => {
+			let activeClass = '';
+			if (imageIndex === 0) {
+				activeClass = ' is-active';
+			}
+			return `
+				<button class="work-gallery__dot${activeClass}" type="button" aria-label="Show image ${imageIndex + 1} of ${images.length}" aria-pressed="${imageIndex === 0}" data-slide-to="${imageIndex}"></button>
+			`;
+		}).join('');
+		let galleryControls = '';
+		if (images.length > 1) {
+			galleryControls = '<button class="work-gallery__arrow work-gallery__arrow--previous" type="button" aria-label="Previous image">&lt;</button><button class="work-gallery__arrow work-gallery__arrow--next" type="button" aria-label="Next image">&gt;</button><div class="work-gallery__dots">' + dots + '</div>';
+		}
+		let link = '<span class="work-card__unlinked">No showcase link yet</span>';
+		if (work.link) {
+			link = `<a class="button button--dark" href="${work.link}" target="_blank" rel="noopener noreferrer">View project <span aria-hidden="true">-&gt;</span></a>`;
+		}
 
 		return `
 			<article class="work-card" data-work-index="${index}">
 				<div class="work-gallery" aria-label="${work.name} image gallery">
 					<div class="work-gallery__track">${imageSlides}</div>
-					${images.length > 1 ? `<button class="work-gallery__arrow work-gallery__arrow--previous" type="button" aria-label="Previous image">&lt;</button><button class="work-gallery__arrow work-gallery__arrow--next" type="button" aria-label="Next image">&gt;</button><div class="work-gallery__dots">${dots}</div>` : ''}
+					${galleryControls}
 					<span class="work-gallery__label">BUILD ${String(index + 1).padStart(2, '0')}</span>
 				</div>
 				<div class="work-card__details">

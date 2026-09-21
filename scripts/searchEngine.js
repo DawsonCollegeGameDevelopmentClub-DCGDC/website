@@ -8,9 +8,12 @@ const escapeHTML = (value) => String(value).replace(/[&<>'"]/g, (character) => (
 	'"': '&quot;'
 })[character]);
 
-const truncate = (value, maxLength = 34) => value.length > maxLength
-	? `${value.slice(0, maxLength - 1)}...`
-	: value;
+const truncate = (value, maxLength = 34) => {
+	if (value.length > maxLength) {
+		return `${value.slice(0, maxLength - 1)}...`;
+	}
+	return value;
+};
 
 function getMatchScore(value, regex, query) {
 	const match = value.match(regex);
@@ -24,9 +27,10 @@ function getMatchScore(value, regex, query) {
 
 function renderSearchResult({ work }) {
 	const image = work.images?.[0];
-	const imageHTML = image
-		? `<img src="${escapeHTML(image)}" alt="" loading="lazy" />`
-		: '<span class="search-result__image search-result__image--empty" aria-hidden="true">--</span>';
+	let imageHTML = '<span class="search-result__image search-result__image--empty" aria-hidden="true">--</span>';
+	if (image) {
+		imageHTML = `<img src="${escapeHTML(image)}" alt="" loading="lazy" />`;
+	}
 	return `<button class="search-result" type="button" role="option" data-project-name="${escapeHTML(work.name)}">${imageHTML}<span class="search-result__copy"><strong>${escapeHTML(truncate(work.name))}</strong><span>${escapeHTML(truncate(work.students.join(' + ')))}</span></span></button>`;
 }
 
