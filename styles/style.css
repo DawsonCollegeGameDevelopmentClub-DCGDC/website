@@ -260,4 +260,10 @@ a:hover {
     .navbar__item:last-child {
         margin-left: 1.5rem;
     }
+
+    .logo {
+        max-width: 15em;
+        height: auto;
+        border-radius: var(--border-radius);
+    }
 }
