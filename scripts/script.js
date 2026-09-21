@@ -50,6 +50,7 @@ async function setupMobileNavbar() {
 
 }
 
+// Dont touch below this line unless you know what you're doing --- Magic stuff 
 function setupMissionButton() {
   const missionButton = document.getElementById('mission-button');
   const missionFeedback = document.getElementById('mission-feedback');
