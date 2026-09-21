@@ -37,9 +37,20 @@ function getMatchScore(value, regex, query) {
 	return 2 + match.index;
 }
 
-function setupSearch(searchInputId, resultsId, works, field) {
-	const input = document.getElementById(searchInputId);
-	const results = document.getElementById(resultsId);
+function renderSearchResult({ work }) {
+	const image = work.images?.[0];
+	const imageHTML = image ? `<img src="${escapeHTML(image)}" alt="" loading="lazy" />` : '<span class="search-result__image search-result__image--empty" aria-hidden="true">--</span>';
+	return `<button class="search-result" type="button" role="option" data-project-name="${escapeHTML(work.name)}">${imageHTML}<span class="search-result__copy"><strong>${escapeHTML(truncate(work.name))}</strong><span>${escapeHTML(truncate(work.students.join(' + ')))}</span></span></button>`;
+}
+
+function renderSearchCategory(title, matches) {
+	if (!matches.length) return '';
+	return `<section class="search-results__category"><h3>${title}</h3>${matches.map(renderSearchResult).join('')}</section>`;
+}
+
+function setupSearch(works) {
+	const input = document.getElementById('works-search-input');
+	const results = document.getElementById('works-search-results');
 	if (!input || !results) return;
 
 	input.addEventListener('input', () => {
@@ -61,21 +72,21 @@ function setupSearch(searchInputId, resultsId, works, field) {
 			return;
 		}
 
-		const matches = works.map((work) => {
-			const searchableValue = field === 'name' ? work.name : work.students.join(' ');
-			return { work, score: getMatchScore(searchableValue, regex, query) };
-		}).filter((result) => result.score !== null).sort((first, second) => first.score - second.score).slice(0, 3);
+		const studentMatches = works.map((work) => ({
+			work,
+			score: getMatchScore(work.students.join(' '), regex, query)
+		})).filter((result) => result.score !== null).sort((first, second) => first.score - second.score).slice(0, 3);
+		const projectMatches = works.map((work) => ({
+			work,
+			score: getMatchScore(work.name, regex, query)
+		})).filter((result) => result.score !== null).sort((first, second) => first.score - second.score).slice(0, 3);
 
-		if (!matches.length) {
-			results.innerHTML = '<p class="search-results__message">No matching projects.</p>';
+		if (!studentMatches.length && !projectMatches.length) {
+			results.innerHTML = '<p class="search-results__message">No results.</p>';
 			return;
 		}
 
-		results.innerHTML = matches.map(({ work }) => {
-			const image = work.images?.[0];
-			const imageHTML = image ? `<img src="${escapeHTML(image)}" alt="" loading="lazy" />` : '<span class="search-result__image search-result__image--empty" aria-hidden="true">--</span>';
-			return `<button class="search-result" type="button" role="option" data-project-name="${escapeHTML(work.name)}">${imageHTML}<span class="search-result__copy"><strong>${escapeHTML(truncate(work.name))}</strong><span>${escapeHTML(truncate(work.students.join(' + ')))}</span></span></button>`;
-		}).join('');
+		results.innerHTML = `${renderSearchCategory('Students', studentMatches)}${renderSearchCategory('Projects', projectMatches)}`;
 
 		results.querySelectorAll('.search-result').forEach((result) => result.addEventListener('click', () => {
 			const card = [...document.querySelectorAll('.work-card')].find((workCard) => workCard.querySelector('h3')?.textContent === result.dataset.projectName);
@@ -130,8 +141,7 @@ function renderStudentWorks(works) {
 	}).join('');
 
 	list.querySelectorAll('.work-card').forEach((card) => setupGallery(card));
-	setupSearch('project-search', 'project-search-results', sortedWorks, 'name');
-	setupSearch('student-search', 'student-search-results', sortedWorks, 'students');
+	setupSearch(sortedWorks);
 }
 
 function setupGallery(card) {

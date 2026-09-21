@@ -48,15 +48,10 @@
                     <span class="status-pill" id="works-count">0 projects</span>
                 </div>
                 <div class="works-search" aria-label="Search student works">
+                    <label for="works-search-input">Search projects or students</label>
                     <div class="works-search__field">
-                        <label for="project-search">Search projects</label>
-                        <input id="project-search" type="search" placeholder="Project name or regex" autocomplete="off" spellcheck="false" />
-                        <div class="search-results" id="project-search-results" role="listbox" aria-label="Matching projects"></div>
-                    </div>
-                    <div class="works-search__field">
-                        <label for="student-search">Search students</label>
-                        <input id="student-search" type="search" placeholder="Student name or regex" autocomplete="off" spellcheck="false" />
-                        <div class="search-results" id="student-search-results" role="listbox" aria-label="Projects by matching students"></div>
+                        <input id="works-search-input" type="search" placeholder="Project or student name (regex supported)" autocomplete="off" spellcheck="false" aria-controls="works-search-results" />
+                        <div class="search-results" id="works-search-results" role="listbox" aria-label="Matching projects and students"></div>
                     </div>
                 </div>
                 <div class="works-list" id="student-works-list" aria-live="polite"></div>
