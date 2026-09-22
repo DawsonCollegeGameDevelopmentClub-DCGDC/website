@@ -5,7 +5,7 @@ const formatDate = (date) => new Intl.DateTimeFormat('en-CA', {
 	dateStyle: 'medium'
 }).format(new Date(`${date}T12:00:00`));
 
-function renderStudentWorks(works) {
+function renderStudentWorks(works, shouldSetupSearch = true) {
 	const list = document.getElementById('student-works-list');
 	const count = document.getElementById('works-count');
 	if (!list || !count) return;
@@ -75,7 +75,9 @@ function renderStudentWorks(works) {
 	}).join('');
 
 	list.querySelectorAll('.work-card').forEach((card) => setupGallery(card));
-	setupSearch(sortedWorks);
+	if (shouldSetupSearch) {
+		setupSearch(sortedWorks, (matchingWorks) => renderStudentWorks(matchingWorks, false));
+	}
 }
 
 function setupGallery(card) {

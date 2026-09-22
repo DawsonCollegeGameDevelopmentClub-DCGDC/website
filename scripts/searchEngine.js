@@ -39,17 +39,39 @@ function renderSearchCategory(title, matches) {
 	return `<section class="search-results__category"><h3>${title}</h3>${matches.map(renderSearchResult).join('')}</section>`;
 }
 
-function setupSearch(works) {
+function getRankedMatches(works, regex, query) {
+	return works.map((work) => {
+		const studentScore = getMatchScore(work.students.join(' '), regex, query);
+		const projectScore = getMatchScore(work.name, regex, query);
+		let score = studentScore;
+		if (projectScore !== null && (score === null || projectScore < score)) {
+			score = projectScore;
+		}
+		return { work, score };
+	}).filter((result) => result.score !== null).sort((first, second) => first.score - second.score);
+}
+
+function renderSearchResults(results, studentMatches, projectMatches) {
+	if (!studentMatches.length && !projectMatches.length) {
+		results.innerHTML = '<p class="search-results__message">No results.</p>';
+		return;
+	}
+	results.innerHTML = `${renderSearchCategory('Students', studentMatches)}${renderSearchCategory('Projects', projectMatches)}`;
+}
+
+function setupSearch(works, onSearch) {
 	const input = document.getElementById('works-search-input');
 	const results = document.getElementById('works-search-results');
+	const searchButton = document.getElementById('works-search-button');
 	if (!input || !results) return;
 
-	input.addEventListener('input', () => {
+	function search() {
 		const query = input.value.trim();
 		results.classList.toggle('is-visible', Boolean(query));
 		if (!query) {
 			results.innerHTML = '';
 			input.removeAttribute('aria-invalid');
+			onSearch(works);
 			return;
 		}
 
@@ -72,12 +94,9 @@ function setupSearch(works) {
 			score: getMatchScore(work.name, regex, query)
 		})).filter((result) => result.score !== null).sort((first, second) => first.score - second.score).slice(0, 3);
 
-		if (!studentMatches.length && !projectMatches.length) {
-			results.innerHTML = '<p class="search-results__message">No results.</p>';
-			return;
-		}
-
-		results.innerHTML = `${renderSearchCategory('Students', studentMatches)}${renderSearchCategory('Projects', projectMatches)}`;
+		const rankedMatches = getRankedMatches(works, regex, query).map((result) => result.work);
+		onSearch(rankedMatches);
+		renderSearchResults(results, studentMatches, projectMatches);
 
 		results.querySelectorAll('.search-result').forEach((result) => result.addEventListener('click', () => {
 			const card = [...document.querySelectorAll('.work-card')].find((workCard) => workCard.querySelector('h3')?.textContent === result.dataset.projectName);
@@ -85,7 +104,15 @@ function setupSearch(works) {
 			input.value = result.dataset.projectName;
 			results.classList.remove('is-visible');
 		}));
+	}
+
+	input.addEventListener('keydown', (event) => {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			search();
+		}
 	});
+	searchButton?.addEventListener('click', search);
 }
 
 export { setupSearch };
