@@ -35,15 +35,19 @@ function renderStudentWorks(works, shouldSetupSearch = true, requestedPage = 1) 
 		const projectNumber = pageStart + index;
 		let images = ['../assets/DawsonGDC.jpg'];
 		if (work.images?.length) {
-			images = work.images.map((image) => `../assets/gameImages/build${work.id}/${image}`);
+			images = work.images;
 		}
 		const imageSlides = images.map((image, imageIndex) => {
 			let activeClass = '';
 			if (imageIndex === 0) {
 				activeClass = ' is-active';
 			}
+			let imagePath = image;
+			if (work.images?.length) {
+				imagePath = `../assets/gameImages/build${work.id}/${image}`;
+			}
 			return `
-				<img class="work-gallery__image${activeClass}" src="${image}" alt="${work.name} preview ${imageIndex + 1}" data-slide="${imageIndex}" loading="lazy" />
+				<img class="work-gallery__image${activeClass}" src="${imagePath}" alt="${work.name} preview ${imageIndex + 1}" data-slide="${imageIndex}" loading="lazy" />
 			`;
 		}).join('');
 		const dots = images.map((_, imageIndex) => {
@@ -100,13 +104,24 @@ function renderPagination(pagination, currentPage, pageCount, onPageChange) {
 	pagination.hidden = false;
 	const pageButtons = Array.from({ length: Math.min(pageCount, 5) }, (_, index) => {
 		const page = index + 1;
-		const current = page === currentPage ? ' aria-current="page"' : '';
+		let current = '';
+		if (page === currentPage) {
+			current = ' aria-current="page"';
+		}
 		return `<button class="works-pagination__page" type="button" data-page="${page}"${current}>${page}</button>`;
 	}).join('');
+	let previousDisabled = '';
+	if (currentPage === 1) {
+		previousDisabled = ' disabled';
+	}
+	let nextDisabled = '';
+	if (currentPage === pageCount) {
+		nextDisabled = ' disabled';
+	}
 	pagination.innerHTML = `
-		<button class="works-pagination__arrow" type="button" data-page="${currentPage - 1}" aria-label="Previous page"${currentPage === 1 ? ' disabled' : ''}>&lt;</button>
+		<button class="works-pagination__arrow" type="button" data-page="${currentPage - 1}" aria-label="Previous page"${previousDisabled}>&lt;</button>
 		<div class="works-pagination__pages">${pageButtons}</div>
-		<button class="works-pagination__arrow" type="button" data-page="${currentPage + 1}" aria-label="Next page"${currentPage === pageCount ? ' disabled' : ''}>&gt;</button>
+		<button class="works-pagination__arrow" type="button" data-page="${currentPage + 1}" aria-label="Next page"${nextDisabled}>&gt;</button>
 		<span class="works-pagination__status">Page ${currentPage} of ${pageCount}</span>
 		<label class="works-pagination__jump">Go to <input type="number" min="1" max="${pageCount}" step="1" inputmode="numeric" aria-label="Go to page" /></label>
 	`;
