@@ -5,13 +5,20 @@ const formatDate = (date) => new Intl.DateTimeFormat('en-CA', {
 	dateStyle: 'medium'
 }).format(new Date(`${date}T12:00:00`));
 
-function renderStudentWorks(works, shouldSetupSearch = true) {
+const PROJECTS_PER_PAGE = 10;
+
+function renderStudentWorks(works, shouldSetupSearch = true, requestedPage = 1) {
 	const list = document.getElementById('student-works-list');
 	const count = document.getElementById('works-count');
-	if (!list || !count) return;
+	const pagination = document.getElementById('works-pagination');
+	if (!list || !count || !pagination) return;
 	const sortedWorks = [...works].sort((firstWork, secondWork) => (
 		new Date(`${secondWork.submitted}T12:00:00`) - new Date(`${firstWork.submitted}T12:00:00`)
 	));
+	const pageCount = Math.ceil(sortedWorks.length / PROJECTS_PER_PAGE);
+	const currentPage = Math.min(Math.max(Number.parseInt(requestedPage, 10) || 1, 1), pageCount || 1);
+	const pageStart = (currentPage - 1) * PROJECTS_PER_PAGE;
+	const pageWorks = sortedWorks.slice(pageStart, pageStart + PROJECTS_PER_PAGE);
 
 	let projectSuffix = 's';
 	if (sortedWorks.length === 1) {
@@ -20,13 +27,15 @@ function renderStudentWorks(works, shouldSetupSearch = true) {
 	count.textContent = `${sortedWorks.length} project${projectSuffix}`;
 	if (!sortedWorks.length) {
 		list.innerHTML = '<p class="works-empty">No projects have landed yet. Check back soon.</p>';
+		pagination.hidden = true;
 		return;
 	}
 
-	list.innerHTML = sortedWorks.map((work, index) => {
+	list.innerHTML = pageWorks.map((work, index) => {
+		const projectNumber = pageStart + index;
 		let images = ['../assets/DawsonGDC.jpg'];
 		if (work.images?.length) {
-			images = work.images;
+			images = work.images.map((image) => `../assets/gameImages/build${work.id}/${image}`);
 		}
 		const imageSlides = images.map((image, imageIndex) => {
 			let activeClass = '';
@@ -60,10 +69,10 @@ function renderStudentWorks(works, shouldSetupSearch = true) {
 				<div class="work-gallery" aria-label="${work.name} image gallery">
 					<div class="work-gallery__track">${imageSlides}</div>
 					${galleryControls}
-					<span class="work-gallery__label">BUILD ${String(index + 1).padStart(2, '0')}</span>
+					<span class="work-gallery__label">BUILD ${String(projectNumber + 1).padStart(2, '0')}</span>
 				</div>
 				<div class="work-card__details">
-					<p class="mission-card__topline"><span>SUBMISSION ${String(index + 1).padStart(2, '0')}</span><span>${formatDate(work.submitted)}</span></p>
+					<p class="mission-card__topline"><span>SUBMISSION ${String(projectNumber + 1).padStart(2, '0')}</span><span>${formatDate(work.submitted)}</span></p>
 					<h3>${work.name}</h3>
 					<p class="work-card__students">By ${work.students.join(' + ')}</p>
 					<p>${work.synopsis}</p>
@@ -75,9 +84,49 @@ function renderStudentWorks(works, shouldSetupSearch = true) {
 	}).join('');
 
 	list.querySelectorAll('.work-card').forEach((card) => setupGallery(card));
+	renderPagination(pagination, currentPage, pageCount, (nextPage) => renderStudentWorks(sortedWorks, false, nextPage));
 	if (shouldSetupSearch) {
-		setupSearch(sortedWorks, (matchingWorks) => renderStudentWorks(matchingWorks, false));
+		setupSearch(sortedWorks, (matchingWorks) => renderStudentWorks(matchingWorks, false, 1));
 	}
+}
+
+function renderPagination(pagination, currentPage, pageCount, onPageChange) {
+	if (pageCount <= 1) {
+		pagination.hidden = true;
+		pagination.innerHTML = '';
+		return;
+	}
+
+	pagination.hidden = false;
+	const pageButtons = Array.from({ length: Math.min(pageCount, 5) }, (_, index) => {
+		const page = index + 1;
+		const current = page === currentPage ? ' aria-current="page"' : '';
+		return `<button class="works-pagination__page" type="button" data-page="${page}"${current}>${page}</button>`;
+	}).join('');
+	pagination.innerHTML = `
+		<button class="works-pagination__arrow" type="button" data-page="${currentPage - 1}" aria-label="Previous page"${currentPage === 1 ? ' disabled' : ''}>&lt;</button>
+		<div class="works-pagination__pages">${pageButtons}</div>
+		<button class="works-pagination__arrow" type="button" data-page="${currentPage + 1}" aria-label="Next page"${currentPage === pageCount ? ' disabled' : ''}>&gt;</button>
+		<span class="works-pagination__status">Page ${currentPage} of ${pageCount}</span>
+		<label class="works-pagination__jump">Go to <input type="number" min="1" max="${pageCount}" step="1" inputmode="numeric" aria-label="Go to page" /></label>
+	`;
+
+	pagination.querySelectorAll('[data-page]').forEach((button) => button.addEventListener('click', () => {
+		if (!button.disabled) onPageChange(button.dataset.page);
+	}));
+	const input = pagination.querySelector('input');
+	const goToInputPage = () => {
+		const page = Number.parseInt(input.value, 10);
+		if (page >= 1 && page <= pageCount) {
+			onPageChange(page);
+			return;
+		}
+		input.setAttribute('aria-invalid', 'true');
+	};
+	input.addEventListener('change', goToInputPage);
+	input.addEventListener('keydown', (event) => {
+		if (event.key === 'Enter') goToInputPage();
+	});
 }
 
 function setupGallery(card) {
