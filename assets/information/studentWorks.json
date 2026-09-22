@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Chiikawa platformer",
+    "students": [
+      "Aris John Apolinario",
+      "Kelly Yu"
+    ],
+    "submitted": "2025-11-05",
+    "started": "2025-10-11",
+    "synopsis": "A random platformer game based on the Chiikawa anime, where you play as a cute character navigating through various levels and obstacles.",
+    "link": "https://sonic.dawsoncollege.qc.ca/~2532450/Chiikawa-main/Chiikawa/pages/Game.html",
+    "images": [
+      "../assets/DawsonGDC.jpg"
+    ]
+  }
+]
