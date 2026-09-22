@@ -65,14 +65,13 @@ function setupSearch(works, onSearch) {
 	const searchButton = document.getElementById('works-search-button');
 	if (!input || !results) return;
 
-	function search() {
+	function updateDropdown() {
 		const query = input.value.trim();
 		results.classList.toggle('is-visible', Boolean(query));
 		if (!query) {
 			results.innerHTML = '';
 			input.removeAttribute('aria-invalid');
-			onSearch(works);
-			return;
+			return false;
 		}
 
 		let regex;
@@ -82,7 +81,7 @@ function setupSearch(works, onSearch) {
 		} catch {
 			input.setAttribute('aria-invalid', 'true');
 			results.innerHTML = '<p class="search-results__message">Invalid regex pattern.</p>';
-			return;
+			return false;
 		}
 
 		const studentMatches = works.map((work) => ({
@@ -94,18 +93,31 @@ function setupSearch(works, onSearch) {
 			score: getMatchScore(work.name, regex, query)
 		})).filter((result) => result.score !== null).sort((first, second) => first.score - second.score).slice(0, 3);
 
-		const rankedMatches = getRankedMatches(works, regex, query).map((result) => result.work);
-		onSearch(rankedMatches);
 		renderSearchResults(results, studentMatches, projectMatches);
 
 		results.querySelectorAll('.search-result').forEach((result) => result.addEventListener('click', () => {
-			const card = [...document.querySelectorAll('.work-card')].find((workCard) => workCard.querySelector('h3')?.textContent === result.dataset.projectName);
-			card?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 			input.value = result.dataset.projectName;
+			search();
 			results.classList.remove('is-visible');
 		}));
+		return true;
 	}
 
+	function search() {
+		const query = input.value.trim();
+		if (!query) {
+			updateDropdown();
+			onSearch(works);
+			return;
+		}
+		if (!updateDropdown()) return;
+		const regex = new RegExp(query, 'i');
+		const rankedMatches = getRankedMatches(works, regex, query).map((result) => result.work);
+		onSearch(rankedMatches);
+		results.classList.remove('is-visible');
+	}
+
+	input.addEventListener('input', updateDropdown);
 	input.addEventListener('keydown', (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault();
