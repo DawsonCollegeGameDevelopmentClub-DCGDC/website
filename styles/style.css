@@ -20,7 +20,8 @@
     --navbar-padding: 1.5rem;
     --container-width: 1140px;
     --border-radius: 8px;
-    --font-family-sans-serif: system-ui, -apple-system, sans-serif;
+    --font-family-sans-serif: "Trebuchet MS", "Segoe UI", sans-serif;
+    --font-family-display: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
 }
 
 /*
@@ -59,9 +60,9 @@ body {
 }
 
 .content {
-    height: 200vh;
-    padding: 100px var(--navbar-padding);
-    text-align: center;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 7rem) var(--navbar-padding);
 }
 
 ul {
@@ -170,6 +171,130 @@ a:hover {
     font-weight: bold;
 }
 
+.hero-panel,
+.mission-control {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    box-shadow: 8px 8px 0 var(--color-border);
+}
+
+.hero-panel {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 2rem;
+    padding: clamp(1.5rem, 5vw, 4rem);
+    background-image: linear-gradient(135deg, var(--color-surface) 0 68%, color-mix(in srgb, var(--color-primary) 12%, var(--color-surface)) 68%);
+}
+
+.eyebrow,
+.mission-card__topline,
+.site-footer__signal {
+    margin: 0 0 0.75rem;
+    color: var(--color-primary);
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+}
+
+h1,
+h2,
+h3 {
+    margin-top: 0;
+    line-height: 1;
+}
+
+h1 {
+    max-width: 11ch;
+    margin-bottom: 1.25rem;
+    font-family: var(--font-family-display);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.intro {
+    max-width: 42rem;
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    border: 1px solid var(--color-text-primary);
+    padding: 0.8rem 1rem;
+    color: var(--color-text-primary);
+    font-weight: bold;
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.button:hover {
+    color: var(--color-text-primary);
+    transform: translate(-3px, -3px);
+    box-shadow: 4px 4px 0 var(--color-primary);
+}
+
+.button--primary { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+.button--primary:hover { color: #fff; }
+.button--quiet { border-color: var(--color-border); }
+.button--dark { background: var(--color-text-primary); color: var(--color-surface); border-color: var(--color-text-primary); }
+.button--dark:hover { color: var(--color-surface); }
+
+.hero-art {
+    display: flex;
+    min-height: 17rem;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    transform: rotate(2deg);
+}
+
+.logo { max-width: min(80%, 15rem); height: auto; border-radius: var(--border-radius); }
+.hero-art__label { position: absolute; right: 0.75rem; bottom: 0.6rem; color: var(--color-primary); font-size: 0.7rem; font-weight: bold; }
+
+.mission-control { margin-top: 4rem; padding: clamp(1.25rem, 4vw, 2.5rem); }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+.section-heading h2 { margin-bottom: 0; font-family: var(--font-family-display); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; text-transform: uppercase; }
+.status-pill { padding: 0.45rem 0.7rem; border: 1px solid var(--color-border); color: var(--color-text-secondary); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+.status-dot { display: inline-block; width: 0.5rem; height: 0.5rem; margin-right: 0.35rem; border-radius: 50%; background: #2ca24c; }
+.mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.mission-card { padding: 1.5rem; background: var(--color-background); border: 1px solid var(--color-border); }
+.mission-card__topline { display: flex; justify-content: space-between; gap: 1rem; }
+.mission-card--featured { display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; min-height: 15rem; background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+.mission-card--featured .mission-card__topline { color: #fff; opacity: 0.8; }
+.mission-card h3 { margin-bottom: 0.5rem; font-size: 2rem; }
+.mission-card p { max-width: 30rem; }
+.mission-card .button { margin-top: 1rem; }
+.mission-feedback { min-height: 1.5em; margin: 0.75rem 0 0; font-size: 0.85rem; font-weight: bold; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.stat-card { display: flex; min-height: 7rem; flex-direction: column; justify-content: space-between; padding: 1rem; border: 1px solid var(--color-border); }
+.stat-card strong { font-size: 1.05rem; }
+.stat-card > span:last-child, .stat-card div span { color: var(--color-text-secondary); font-size: 0.8rem; }
+.stat-card__icon { color: var(--color-primary); font-family: var(--font-family-display); font-size: 1.5rem; }
+.stat-card--meter { grid-column: span 2; min-height: auto; gap: 0.75rem; }
+.stat-card--meter div { display: flex; justify-content: space-between; gap: 1rem; }
+.energy-meter { display: block; height: 0.5rem; background: var(--color-border); }
+.energy-meter span { display: block; width: 70%; height: 100%; background: var(--color-primary); }
+
+.site-footer { border-top: 1px solid var(--color-border); background: var(--color-surface); }
+.site-footer__inner { display: flex; max-width: var(--container-width); align-items: center; justify-content: space-between; gap: 1rem; margin: 0 auto; padding: 2rem var(--navbar-padding); color: var(--color-text-secondary); font-size: 0.8rem; }
+.site-footer__inner p { margin: 0; }
+.site-footer__inner strong { color: var(--color-text-primary); }
+.site-footer__signal { margin: 0; }
+.site-footer__signal span { color: #2ca24c; }
+
 /* Focus state for all interactive elements */
 :is(.navbar__toggle, .navbar__link, #theme-toggle):focus-visible {
     outline: 2px solid var(--color-primary);
@@ -260,4 +385,11 @@ a:hover {
     .navbar__item:last-child {
         margin-left: 1.5rem;
     }
+
+}
+
+@media (max-width: 767px) {
+    .hero-panel, .mission-grid { grid-template-columns: 1fr; }
+    .hero-art { min-height: 12rem; }
+    .site-footer__inner { align-items: flex-start; flex-direction: column; }
 }

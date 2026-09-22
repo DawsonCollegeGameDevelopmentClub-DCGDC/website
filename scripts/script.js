@@ -1,15 +1,21 @@
-// This main script runs after the DOM is ready.
-document.addEventListener('DOMContentLoaded', function() {
-  // --- Mobile Menu Toggle ---
-  const navbarToggle = document.getElementById('navbarToggle');
-  const navbarMenu = document.getElementById('navbarMenu');
-  if (navbarToggle) {
-    navbarToggle.addEventListener('click', function() {
-      navbarToggle.classList.toggle('is-active');
-      navbarMenu.classList.toggle('is-active');
-    });
-  }
+"use strict";
 
+
+async function appendNav() {
+  const response = await fetch("/pages/navbar.html");
+  const navbarHTML = await response.text();
+  const navbar = document.querySelector(".navbar");
+  navbar.innerHTML = navbarHTML;
+
+}
+
+async function setupNavbarAndTheme() {
+  await appendNav();
+  setupThemeToggle();
+  setupMobileNavbar()
+}
+
+async function setupThemeToggle() {
   // --- Theme Toggling Logic ---
   const themeToggle = document.getElementById('theme-toggle');
   const htmlElement = document.documentElement;
@@ -27,5 +33,38 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem('theme', newTheme);
     });
   }
-});
 
+}
+
+async function setupMobileNavbar() {
+  // --- Mobile Menu Toggle ---
+  const navbarToggle = document.getElementById('navbarToggle');
+  console.log(navbarToggle);
+  const navbarMenu = document.getElementById('navbarMenu');
+  if (navbarToggle) {
+    navbarToggle.addEventListener('click', function() {
+      navbarToggle.classList.toggle('is-active');
+      navbarMenu.classList.toggle('is-active');
+    });
+  }
+
+}
+
+// Dont touch below this line unless you know what you're doing --- Magic stuff 
+function setupMissionButton() {
+  const missionButton = document.getElementById('mission-button');
+  const missionFeedback = document.getElementById('mission-feedback');
+  const discordInvite = 'https://discord.gg/XwTqyADs2Z';
+
+  if (missionButton && missionFeedback) {
+    missionButton.addEventListener('click', function () {
+      window.open(discordInvite, '_blank', 'noopener,noreferrer');
+      missionButton.textContent = 'Quest accepted +';
+      missionButton.disabled = true;
+      missionFeedback.textContent = 'Nice. Your next co-op starts here.';
+    });
+  }
+}
+
+setupNavbarAndTheme();
+setupMissionButton();
