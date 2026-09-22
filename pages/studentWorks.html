@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- data-theme attribute will be managed by JS -->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dawson Game Dev Club</title>
+  <meta name="description"
+    content="Dawson College Game Dev: Student game development, game design, indie game jams, coding, pixel art, 3D modeling, and audio in Montreal. Join our dev or Art team!">
+  <!--
+        FOUC PREVENTION SCRIPT:
+        This runs instantly before the page content is rendered to set the theme,
+        preventing a "flash of unstyled content" if the user has a saved
+        or OS-level preference for a non-default theme.
+        -->
+  <script>
+    (function () {
+      const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+  <script src="../scripts/studentWorks.js" type="module"></script>
+  <script src="../scripts/searchEngine.js" defer></script>
+
+  <link rel="stylesheet" href="../styles/style.css" />
+  <link rel="stylesheet" href="../styles/studentWorks.css" />
+  <script src="../scripts/script.js" defer></script>
+</head>
+
+<body>
+  <header class="navbar">
+  </header>
+
+  <main class="content student-works-page">
+    <section class="works-intro" aria-labelledby="works-title">
+      <div>
+        <p class="eyebrow">THE SHOWCASE // STUDENT BUILDS</p>
+        <h1 id="works-title">Student works</h1>
+      </div>
+      <p class="works-intro__copy">A living archive of experiments, prototypes, and worlds made by the Dawson game dev
+        community.</p>
+    </section>
+
+    <section class="works-board" aria-labelledby="works-board-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">RECENT UPLOADS</p>
+          <h2 id="works-board-title">The portfolio</h2>
+        </div>
+        <span class="status-pill" id="works-count">0 projects</span>
+      </div>
+      <div class="works-search" aria-label="Search student works">
+        <label for="works-search-input">Search projects or students</label>
+        <div class="works-search__field">
+          <input id="works-search-input" type="search" placeholder="Project or student name" autocomplete="off"
+            spellcheck="false" aria-controls="works-search-results" />
+          <button class="works-search__button button button--dark" id="works-search-button" type="button">Search <span
+              aria-hidden="true">-&gt;</span></button>
+          <div class="search-results" id="works-search-results" role="listbox"
+            aria-label="Matching projects and students"></div>
+        </div>
+      </div>
+      <div class="works-list" id="student-works-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+  </footer>
+</body>

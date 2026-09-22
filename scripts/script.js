@@ -12,7 +12,7 @@ async function appendNav() {
 async function appendFooter() {
   const response = await fetch("/pages/footer.html");
   const footerHTML = await response.text();
-  const footer = document.querySelector(".footer");
+  const footer = document.querySelector(".site-footer");
   footer.innerHTML = footerHTML;
 }
 
@@ -58,4 +58,21 @@ async function setupMobileNavbar() {
 
 }
 
+// Dont touch below this line unless you know what you're doing --- Magic stuff
+function setupMissionButton() {
+  const missionButton = document.getElementById('mission-button');
+  const missionFeedback = document.getElementById('mission-feedback');
+  const discordInvite = 'https://discord.gg/XwTqyADs2Z';
+
+  if (missionButton && missionFeedback) {
+    missionButton.addEventListener('click', function() {
+      window.open(discordInvite, '_blank', 'noopener,noreferrer');
+      missionButton.textContent = 'Quest accepted +';
+      missionButton.disabled = true;
+      missionFeedback.textContent = 'Nice. Your next co-op starts here.';
+    });
+  }
+}
+
 setupNavbarAndTheme();
+setupMissionButton();
