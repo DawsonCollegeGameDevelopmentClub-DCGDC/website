@@ -10,8 +10,9 @@
     "synopsis": "A random platformer game based on the Chiikawa anime, where you play as a cute character navigating through various levels and obstacles.",
     "link": "https://sonic.dawsoncollege.qc.ca/~2532450/Chiikawa-main/Chiikawa/pages/Game.html",
     "images": [
-      "../assets/gameImages/ArisKelly/image1.png",
-      "../assets/gameImages/ArisKelly/image2.png"
-    ]
+      "image1.png",
+      "image2.png"
+    ],
+    "id": 1
   }
 ]

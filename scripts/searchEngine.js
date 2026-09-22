@@ -26,7 +26,7 @@ function getMatchScore(value, regex, query) {
 }
 
 function renderSearchResult({ work }) {
-	const image = work.images?.[0];
+	const image = work.images?.[0] ? `../assets/gameImages/build${work.id}/${work.images[0]}` : null;
 	let imageHTML = '<span class="search-result__image search-result__image--empty" aria-hidden="true">--</span>';
 	if (image) {
 		imageHTML = `<img src="${escapeHTML(image)}" alt="" loading="lazy" />`;
