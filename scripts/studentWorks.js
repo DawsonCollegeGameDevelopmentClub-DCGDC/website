@@ -1,19 +1,6 @@
 'use strict';
 import { setupSearch } from './searchEngine.js';
 
-const studentWorks = [
-	{
-		name: 'Chiikawa platformer',
-		students: ['Aris John Apolinario', 'Kelly Yu'],
-		submitted: '2025-11-05',
-		started: '2025-10-11',
-		synopsis: 'A random platformer game based on the Chiikawa anime, where you play as a cute character navigating through various levels and obstacles.',
-		link: 'https://sonic.dawsoncollege.qc.ca/~2532450/Chiikawa-main/Chiikawa/pages/Game.html',
-		images: [ '../assets/DawsonGDC.jpg' ]
-	},  
-
-];
-
 const formatDate = (date) => new Intl.DateTimeFormat('en-CA', {
 	dateStyle: 'medium'
 }).format(new Date(`${date}T12:00:00`));
@@ -110,4 +97,24 @@ function setupGallery(card) {
 	dots.forEach((dot, index) => dot.addEventListener('click', () => showSlide(index)));
 }
 
-renderStudentWorks(studentWorks);
+async function loadStudentWorks() {
+	try {
+		const response = await fetch('../assets/information/studentWorks.json');
+		if (!response.ok) {
+			throw new Error(`Could not load student works: ${response.status}`);
+		}
+		const studentWorks = await response.json();
+		renderStudentWorks(studentWorks);
+	} catch (error) {
+		const list = document.getElementById('student-works-list');
+		if (list) {
+            const child = document.createElement('p');
+            child.classList.add('works-empty');
+            child.textContent = 'Student works could not be loaded right now.';
+            list.appendChild(child);
+		}
+		console.error(error);
+	}
+}
+
+loadStudentWorks();
