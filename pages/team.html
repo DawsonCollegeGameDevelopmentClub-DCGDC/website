@@ -1,55 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<!-- data-theme attribute will be managed by JS -->
+  <!-- data-theme attribute will be managed by JS -->
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dawson Game Dev Club</title>
-  <meta name="description" content="Dawson College Game Dev: Student game development, game design, indie game jams, coding, pixel art, 3D modeling, and audio in Montreal. Join our dev or Art team!">
-  <!--
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dawson Game Dev Club</title>
+    <meta
+      name="description"
+      content="Dawson College Game Dev: Student game development, game design, indie game jams, coding, pixel art, 3D modeling, and audio in Montreal. Join our dev or Art team!"
+    />
+    <!--
       FOUC PREVENTION SCRIPT:
       This runs instantly before the page content is rendered to set the theme,
       preventing a "flash of unstyled content" if the user has a saved
       or OS-level preference for a non-default theme.
     -->
-      <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      <link rel="shortcut icon" href="/favicon.ico" />
-      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-      <link rel="manifest" href="/site.webmanifest" />
-  <script>
-    (function () {
-      const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      if (theme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
-    })();
-  </script>
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script>
+      (function () {
+        const theme =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        if (theme === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+    </script>
 
-  <link rel="stylesheet" href="/styles/style.css" />
-  <script src="/scripts/script.js" defer></script>
-</head>
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/scripts/script.js" defer></script>
+  </head>
 
-<body>
+  <body>
+    <header class="navbar"></header>
 
+    <main class="content">
+      <h1>Our Team</h1>
+      <p></p>
+    </main>
 
-  <header class="navbar">
-  </header>
-
-  <main class="content">
-    <h1>Our Team</h1>
-    <p></p>
-  </main>
-
-  <footer class="site-footer">
-            <div class="site-footer__inner">
-                <p><strong>DAWSON DGD</strong><br />Make. Play. Repeat.</p>
-                <p class="site-footer__signal">SYSTEM STATUS: <span>ALL SYSTEMS GO</span></p>
-                <p>&copy; 2026 Dawson Game Dev</p>
-            </div>
-        </footer>
-
-</body>
-
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <p><strong>DAWSON DGD</strong><br />Make. Play. Repeat.</p>
+        <p class="site-footer__signal">
+          SYSTEM STATUS: <span>ALL SYSTEMS GO</span>
+        </p>
+        <p>&copy; 2026 Dawson Game Dev</p>
+      </div>
+    </footer>
+  </body>
 </html>
